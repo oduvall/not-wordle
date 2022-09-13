@@ -1,0 +1,158 @@
+html {
+  background-color: #EDEDE9;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+.modalContentWin {
+  color: white;
+  background-color: #55A630;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  font-size: 1em;
+  font-family: Courier New;
+  font-weight: bold;
+  padding: 20px;
+  top: 40px;
+  bottom: 40px;
+  left: 40px;
+  right: 40px;
+  border-radius: 5px;
+  border: solid 1px #007F5F;
+}
+
+.modalContentLoss {
+  color: white;
+  background-color: #E5383B;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  font-size: 1em;
+  font-family: Courier New;
+  font-weight: bold;
+  padding: 20px;
+  top: 40px;
+  bottom: 40px;
+  left: 40px;
+  right: 40px;
+  border-radius: 5px;
+  border: solid 1px #BA181B;
+}
+
+.modalOverlay {
+  position: fixed;
+  overflow: hidden;
+  top: 150px;
+  bottom: 100px;
+  left: 300px;
+  right: 300px;
+  opacity: 0;
+  transition: opacity 500ms ease-in-out;
+}
+
+.modalAfterOpen {
+  opacity: 1;
+}
+
+.modalBeforeClose {
+  opacity: 0;
+}
+
+.modalBody {
+  font-size: 1em;
+  font-family: Courier New;
+  font-weight: bold;
+}
+
+.modalCorrectWord {
+  font-size: 2em;
+  font-family: Courier New;
+  font-weight: bold;
+}
+
+/* h1 {
+  font-family: Courier New;
+  font-size: 3em;
+} */
+
+/* h1 {
+  margin-top: 0px;
+  margin-bottom: 50px;
+  text-align: center;
+  font-family: 'Courier New';
+  font-size: 3rem;
+  letter-spacing: 0.15rem;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: -4px 4px #ef3550,
+               -8px 8px #f48fb1,
+               -12px 12px #7e57c2,
+               -16px 16px #2196f3,
+               -20px 20px #26c6da,
+               -24px 24px #43a047,
+               -28px 28px #eeff41,
+               -32px 32px #f9a825,
+               -36px 36px #ff5722;
+} */
+
+.rainbow-letters {
+  font-size: 3em;
+  font-family: 'Courier New';
+  font-weight: bold;
+  text-transform: uppercase;
+  text-shadow: -1px 1px #312e2e;
+}
+
+.rainbow-letters span:nth-child(10n + 1) {
+  color: #F94144;
+}
+
+.rainbow-letters span:nth-child(10n + 2) {
+  color: #F3722C;
+}
+
+.rainbow-letters span:nth-child(10n + 3){
+  color: #F8961E;
+}
+
+.rainbow-letters span:nth-child(10n + 5){
+  color: #F9844A;
+}
+
+.rainbow-letters span:nth-child(10n + 4) {
+  color: #F9C74F;
+}
+
+.rainbow-letters span:nth-child(10n + 6){
+  color: #90BE6D;
+}
+
+.rainbow-letters span:nth-child(10n + 7){
+  color: #43AA8B;
+}
+
+.rainbow-letters span:nth-child(10n + 8){
+  color: #4D908E;
+}
+
+.rainbow-letters span:nth-child(10n + 9){
+  color: #577590;
+}
+
+.rainbow-letters span:nth-child(10n + 10){
+  color: #277DA1;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
