@@ -12,7 +12,7 @@ A project web app inspired by the popular web and mobile game Wordle.
 ## Introduction
 This project is a recreation of the popular game Wordle, originally developed by Josh Wardle and published by The New York Times Company. The project takes advantage of two popular web frameworks, ReactJS for the front-end and Flask for the back-end, to generate a game in which the user has six attempts to guess a five-letter word randomly pulled from WORDS API at https://www.wordsapi.com. The ReactJS front-end handles the display of the user-interface and the inputs entered by the user, and the Flask back-end acts as an intermediary between the front-end and WORDS API. 
 
-I took on this project in order to sharpen my skills working with ReactJS, Flask, and requests to and from a RESTful API. This project was developed purely for educational purposes and not made for commercial distribution.
+I took on this project in order to sharpen my skills working with ReactJS, Flask, and requests to and from a RESTful API. This project was developed purely for educational purposes and not made for commercial distribution or monetary gain.
 
 ## How to play
 * Upon launch, a five-letter word from WORDS API will be generated. The user must attempt to guess this word in six or fewer guesses.
