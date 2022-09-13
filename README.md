@@ -55,3 +55,4 @@ npm start
 * Add virtual backspace key.
 * Allow submission with enter key.
 * Simplify setup.
+* Write unit tests.
