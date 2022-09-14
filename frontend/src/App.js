@@ -2,13 +2,12 @@ import React from "react";
 import update from "immutability-helper";
 import KeyBoard from "./Keyboard";
 import { Col, Row, StyledButton } from "./Styles"
-import GuessGrid from "./GuessRow";
+import GuessGrid from "./GuessGrid";
 import Modal from "react-modal";
 import CustomModal from "./CustomModal";
 
 
 Modal.setAppElement("div");
-
 
 class App extends React.Component {
   constructor(props) {
@@ -174,12 +173,17 @@ class App extends React.Component {
     let countClone = structuredClone(this.charCounts);
     let newColors = {};
     // Identify green boxes.
-    for (let char = 0; char < this.state.guesses[this.state.guessNumber].length; char++) {
-      // If character's count > 0 and character in correct position, assign "green", 
-      // reduce count by 1, and remove index from indices array.
+    for (
+      let char = 0; 
+      char < this.state.guesses[this.state.guessNumber].length; 
+      char++
+      ) {
+      // If character's count > 0 and character in correct position, assign 
+      // "green", reduce count by 1, and remove index from indices array.
       if (
           countClone[this.state.guesses[this.state.guessNumber][char]] !== 0 && 
-          this.state.guesses[this.state.guessNumber][char] === this.state.correctWord[char]
+          this.state.guesses[this.state.guessNumber][char] === 
+          this.state.correctWord[char]
         ) {
           newColors[char] = "green";
           countClone[this.state.guesses[this.state.guessNumber][char]] -= 1;
@@ -190,9 +194,12 @@ class App extends React.Component {
     }
     // Identify gold and grey boxes.
     for (let index of indices) {
-      // If character's count > 0 and character is in the correct word, assign "gold" and reduce count by 1.
+      // If character's count > 0 and character is in the correct word, assign 
+      // "gold" and reduce count by 1.
       if (
-        this.state.correctWord.includes(this.state.guesses[this.state.guessNumber][index]) && 
+        this.state.correctWord.includes(
+          this.state.guesses[this.state.guessNumber][index]
+        ) && 
         countClone[this.state.guesses[this.state.guessNumber][index]] !== 0
       ) {
         newColors[index] = "gold";
@@ -216,7 +223,10 @@ class App extends React.Component {
       const regex = /^[a-zA-Z]$/;
       if (regex.test(event.key) && this.state.currentGuess.length < 5) {
         this.setState((prevState) => (
-          { currentGuess: prevState.currentGuess + event.key.toLocaleUpperCase() }
+          { 
+            currentGuess: prevState.currentGuess + 
+            event.key.toLocaleUpperCase() 
+          }
         ), () => {
           // Disable submit button if guess length < 5.
           if (this.state.currentGuess.length < 5) {
@@ -232,9 +242,11 @@ class App extends React.Component {
         });
         
         // If key is Backspace:
-      } else if (event.key === "Backspace" && this.state.currentGuess.length > 0) {
-        this.setState((prevState) => ({
-          currentGuess: prevState.currentGuess.slice(0, -1)
+      } else if (
+          event.key === "Backspace" && this.state.currentGuess.length > 0
+        ) {
+          this.setState((prevState) => ({
+            currentGuess: prevState.currentGuess.slice(0, -1)
         }), () => {
           // Disable submit button if guess length < 5.
           if (this.state.currentGuess.length < 5) {
@@ -307,8 +319,8 @@ class App extends React.Component {
           disabled : { 
             $set : (
               (
-                this.state.guesses[this.state.guessNumber] === this.state.correctWord 
-                || row === 5
+                this.state.guesses[this.state.guessNumber] === 
+                this.state.correctWord || row === 5
               ) 
               ? true : false
             )
@@ -327,15 +339,18 @@ class App extends React.Component {
     let colorPriority = ["white", "grey", "gold", "green"];
     for (let i=0 ; i<this.state.guesses[this.state.guessNumber].length ; i++) {
       let keyBoardRow = (
-        this.state.guesses[this.state.guessNumber][i] in this.state.keyBoardLetters[0] 
+        this.state.guesses[this.state.guessNumber][i] in 
+        this.state.keyBoardLetters[0] 
         ? 0 : (
-          this.state.guesses[this.state.guessNumber][i] in this.state.keyBoardLetters[1] 
+          this.state.guesses[this.state.guessNumber][i] in 
+          this.state.keyBoardLetters[1] 
           ? 1 : 2
         )
       );
       let greatestColor = Math.max(
         colorPriority.indexOf(
-          this.state.keyBoardLetters[keyBoardRow][this.state.guesses[this.state.guessNumber][i]]
+          this.state.keyBoardLetters[keyBoardRow]
+          [this.state.guesses[this.state.guessNumber][i]]
         ), 
         colorPriority.indexOf(newColors[i])
       );
@@ -348,8 +363,13 @@ class App extends React.Component {
           }
         }
       };
-      modifiedState.keyBoardLetters[keyBoardRow][this.state.guesses[this.state.guessNumber][i]] = 
-      newEntry.keyBoardLetters[keyBoardRow][this.state.guesses[this.state.guessNumber][i]];
+      modifiedState.keyBoardLetters[keyBoardRow][
+        this.state.guesses[this.state.guessNumber][i]
+      ] = (
+        newEntry.keyBoardLetters[keyBoardRow][
+          this.state.guesses[this.state.guessNumber][i]
+        ]
+      );
     };
     newState = update(newState, modifiedState);
     this.setState(newState);
@@ -364,7 +384,9 @@ class App extends React.Component {
       return { guesses };
     }, () => {
     // Check if guess is correct.
-      if (this.state.guesses[this.state.guessNumber] === this.state.correctWord) {
+      if (
+        this.state.guesses[this.state.guessNumber] === this.state.correctWord
+      ) {
         // Player wins!!
         console.log("CORRECT!!!! WOOOOOO");
         this.setState(
@@ -396,7 +418,7 @@ class App extends React.Component {
         this.setState({ 
           currentGuess : "" ,
           submissionAllowed : false,
-        }, () => {console.log("currentGuess after submission: ", this.state.currentGuess)})
+        });
       });
     });
     event.preventDefault();
