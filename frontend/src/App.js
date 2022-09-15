@@ -215,7 +215,6 @@ class App extends React.Component {
 
   componentDidMount() {
     this.fetchWord()
-    console.log(this.state.correctWord)
     window.addEventListener('keydown', (event) => {
       event.preventDefault();
 
@@ -237,8 +236,6 @@ class App extends React.Component {
           } else {
             this.validateWord(this.state.currentGuess);
           };
-          console.log("Current guess: ", this.state.currentGuess);
-          console.log("correct word", this.state.correctWord);
         });
         
         // If key is Backspace:
@@ -257,7 +254,6 @@ class App extends React.Component {
           } else {
             this.validateWord(this.state.currentGuess);
           };
-          console.log("Current guess: ", this.state.currentGuess);
         });
       };
     });
@@ -265,13 +261,11 @@ class App extends React.Component {
 
 
   onClick(event) {
-    console.log("onClick() is firing.", event);
     // Append pressed key to currentGuess.
     this.setState((prevState) => (
         { currentGuess : prevState.currentGuess + event }
       ), 
       () => {
-        console.log("Current guess: ", this.state.currentGuess);
         // Disable submit button if guess length < 5.
         if (this.state.currentGuess.length < 5) {
           this.setState({ submissionAllowed : false });
@@ -388,7 +382,6 @@ class App extends React.Component {
         this.state.guesses[this.state.guessNumber] === this.state.correctWord
       ) {
         // Player wins!!
-        console.log("CORRECT!!!! WOOOOOO");
         this.setState(
           {gameOver : true}, () => {
             this.setState({playerWins : true})
@@ -396,7 +389,6 @@ class App extends React.Component {
           }
         );
         
-        console.log(this.state.gameOver, this.state.modalIsOpen);
       // Check whether game is over or not.
       } else if (this.state.guessNumber > 4) {
         // Player loses.
@@ -405,7 +397,6 @@ class App extends React.Component {
             this.setState({modalIsOpen : true})
           }
         );
-        console.log("GAME OVER / Guess number: ", this.state.guessNumber);
       } 
       let newColors = this.getNewColors();
       // Update Colors of GuessRow boxes and Keyboard keys.
