@@ -1,3 +1,4 @@
+// Main game file which handles user-interface and user inputs.
 import React from "react";
 import update from "immutability-helper";
 import KeyBoard from "./Keyboard";
@@ -7,8 +8,10 @@ import Modal from "react-modal";
 import CustomModal from "./CustomModal";
 
 
+// Initialize endgame modal.
 Modal.setAppElement("div");
 
+// Main App component that handles the state of the game.
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -140,7 +143,7 @@ class App extends React.Component {
     }, {});
   };
 
-
+  // Send GET request to Flask backend to retrieve a word from WordsAPI.
   async fetchWord() {
       await fetch('http://127.0.0.1:5000/get_word')
         .then((response) => response.json())
@@ -150,7 +153,7 @@ class App extends React.Component {
         ));
     };
   
-
+  // Send GET request to Flask backend to check if user's input is a real word.
   async validateWord(word) {
     await fetch(`http://127.0.0.1:5000/validate_guess/${word}`)
     .then((response) => response.json())
@@ -166,45 +169,44 @@ class App extends React.Component {
     });
   };
 
-
+  // Return an object of new colors to update the current guess boxes to.
   getNewColors() {
-    // Assign colors to input boxes.
     let indices = [0,1,2,3,4];
     let countClone = structuredClone(this.charCounts);
     let newColors = {};
     // Identify green boxes.
     for (
-      let char = 0; 
-      char < this.state.guesses[this.state.guessNumber].length; 
-      char++
+      let index = 0; 
+      index < this.state.guesses[this.state.guessNumber].length; 
+      index++
       ) {
-      // If character's count > 0 and character in correct position, assign 
-      // "green", reduce count by 1, and remove index from indices array.
+      // If character's count > 0 and character in correct position:
       if (
-          countClone[this.state.guesses[this.state.guessNumber][char]] !== 0 && 
-          this.state.guesses[this.state.guessNumber][char] === 
-          this.state.correctWord[char]
+          countClone[this.state.guesses[this.state.guessNumber][index]] !== 0 && 
+          this.state.guesses[this.state.guessNumber][index] === 
+          this.state.correctWord[index]
         ) {
-          newColors[char] = "green";
-          countClone[this.state.guesses[this.state.guessNumber][char]] -= 1;
-          if (indices.indexOf(char) > -1) {
-            indices.splice(indices.indexOf(char), 1);
+        // Assign "green", decrement count, and remove index from indices array.
+          newColors[index] = "green";
+          countClone[this.state.guesses[this.state.guessNumber][index]] -= 1;
+          if (indices.indexOf(index) > -1) {
+            indices.splice(indices.indexOf(index), 1);
           }
       }
     }
     // Identify gold and grey boxes.
     for (let index of indices) {
-      // If character's count > 0 and character is in the correct word, assign 
-      // "gold" and reduce count by 1.
+      // If character's count > 0 and character is in the correct word:
       if (
         this.state.correctWord.includes(
           this.state.guesses[this.state.guessNumber][index]
         ) && 
         countClone[this.state.guesses[this.state.guessNumber][index]] !== 0
+        // Assign "gold" and reduce count by 1.
       ) {
         newColors[index] = "gold";
         countClone[this.state.guesses[this.state.guessNumber][index]] -= 1;
-      // Otherwise, assign "grey".
+        // Otherwise, assign "grey".
       } else {
         newColors[index] = "grey";
       }
@@ -212,15 +214,18 @@ class App extends React.Component {
     return newColors;
   };
 
-
+  /* After App mounts, call fetchWord() to initialize correctWord, add event 
+  listener for keydown events, and handle them. 
+  */
   componentDidMount() {
     this.fetchWord()
     window.addEventListener('keydown', (event) => {
       event.preventDefault();
 
-      // If key is a letter:
+      // If key is a valid letter:
       const regex = /^[a-zA-Z]$/;
       if (regex.test(event.key) && this.state.currentGuess.length < 5) {
+        // Append pressed key to currentGuess.
         this.setState((prevState) => (
           { 
             currentGuess: prevState.currentGuess + 
@@ -250,7 +255,7 @@ class App extends React.Component {
             this.setState({ submissionAllowed : false });
             this.setState({ submitMessage : "SUBMIT" });
             this.setState({ submitColorScheme : "submitDisabled"});
-          // If guess length = 5, check if word is valid.
+          // If guess length = 5, call validateWord() to validate user's guess.
           } else {
             this.validateWord(this.state.currentGuess);
           };
@@ -259,7 +264,7 @@ class App extends React.Component {
     });
   };
 
-
+  // Handle digital key click events.
   onClick(event) {
     // Append pressed key to currentGuess.
     this.setState((prevState) => (
@@ -279,9 +284,9 @@ class App extends React.Component {
     );
   };
 
-
+  // Update colors on previous guess boxes and digital keyboard keys.
   updateState(row, newColors) {
-    // Update GuessRow boxes.
+    // Update guess boxes.
     let newState = update(this.state, {
       guessRows : {
         [row] : {
@@ -309,6 +314,7 @@ class App extends React.Component {
             }
           }
         },
+        // Disable previous guess boxes, enable current guess boxes.
         [(row === 5 ? 0 : row + 1)] : {
           disabled : { 
             $set : (
@@ -330,8 +336,8 @@ class App extends React.Component {
         2 : {}
       }
     };
-    let colorPriority = ["white", "grey", "gold", "green"];
     for (let i=0 ; i<this.state.guesses[this.state.guessNumber].length ; i++) {
+      // Find which row of the KeyBoard the key is in.
       let keyBoardRow = (
         this.state.guesses[this.state.guessNumber][i] in 
         this.state.keyBoardLetters[0] 
@@ -341,6 +347,10 @@ class App extends React.Component {
           ? 1 : 2
         )
       );
+      /* Ensure that lower colors do not override higher colors when assigning 
+      colors to keys. 
+      */
+      let colorPriority = ["white", "grey", "gold", "green"];
       let greatestColor = Math.max(
         colorPriority.indexOf(
           this.state.keyBoardLetters[keyBoardRow]
@@ -348,6 +358,7 @@ class App extends React.Component {
         ), 
         colorPriority.indexOf(newColors[i])
       );
+      // Update modifiedState with KeyBoard colors.
       let newEntry = { 
         keyBoardLetters : {
           [keyBoardRow] : {
@@ -365,13 +376,14 @@ class App extends React.Component {
         ]
       );
     };
+    // Update game state with new colors.
     newState = update(newState, modifiedState);
     this.setState(newState);
   };
 
-
+  // Handle user guess submissions.
   handleSubmit(event) {
-    // Log currentGuess in guesses.
+    // Save currentGuess in guesses at the current guess number.
     this.setState(prevState => {
       let guesses = Object.assign({}, prevState.guesses);
       guesses[this.state.guessNumber] = this.state.currentGuess;
@@ -381,7 +393,7 @@ class App extends React.Component {
       if (
         this.state.guesses[this.state.guessNumber] === this.state.correctWord
       ) {
-        // Player wins!!
+        // Player wins.
         this.setState(
           {gameOver : true}, () => {
             this.setState({playerWins : true})
@@ -399,7 +411,7 @@ class App extends React.Component {
         );
       } 
       let newColors = this.getNewColors();
-      // Update Colors of GuessRow boxes and Keyboard keys.
+      // Update Colors of guess boxes and KeyBoard keys.
       this.updateState(this.state.guessNumber, newColors)
         
       // Increment guessNumber, reset currentGuess, disable submission.
@@ -415,7 +427,7 @@ class App extends React.Component {
     event.preventDefault();
   };
 
-
+  // Get a new word and reset the game to its initial state.
   resetGame() {
     this.fetchWord();
     this.setState(
@@ -533,13 +545,14 @@ class App extends React.Component {
         modalIsOpen: false
       }
     );
+    // Ensure modal does not switch from win to loss on fade out transition.
     setTimeout(() => {
         this.setState({playerWins : false})
       }, 500
     );
   };
 
-
+  // Render the user-interface every time state is updated.
   render() {
     return (
       <div>
